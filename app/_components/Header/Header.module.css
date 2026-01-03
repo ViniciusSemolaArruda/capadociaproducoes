@@ -1,0 +1,272 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 80;
+  background: rgba(8, 8, 8, 0.72);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* DESKTOP */
+.nav {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 14px 18px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 14px;
+}
+
+.side,
+.sideRight {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.sideRight {
+  justify-content: flex-end;
+}
+
+.link {
+  color: rgba(255, 255, 255, 0.86);
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  padding: 8px 2px;
+  border-bottom: 2px solid transparent;
+  transition: 150ms ease;
+}
+
+.link:hover {
+  color: #fff;
+  border-bottom-color: rgba(255, 0, 0, 0.85);
+}
+
+.logoWrap {
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+}
+
+/* desktop */
+.logo {
+  width: 170px;
+  height: 170px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.35));
+}
+
+.cta {
+  margin-left: 6px;
+  background: #e11d2a;
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  transition: 150ms ease;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.cta:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+/* Burger (mobile) */
+.burger {
+  display: none;
+  margin-left: 8px;
+  width: 46px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  position: relative;
+}
+
+.bLine {
+  display: block;
+  height: 2px;
+  width: 18px;
+  background: rgba(255, 255, 255, 0.92);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: 220ms ease;
+  border-radius: 2px;
+}
+
+.bLine:nth-child(1) { top: 14px; }
+.bLine:nth-child(2) { top: 21px; }
+.bLine:nth-child(3) { top: 28px; }
+
+.bLine1 { transform: translateX(-50%) translateY(7px) rotate(45deg); }
+.bLine2 { opacity: 0; }
+.bLine3 { transform: translateX(-50%) translateY(-7px) rotate(-45deg); }
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  pointer-events: none;
+  transition: 200ms ease;
+  backdrop-filter: blur(2px);
+  z-index: 88;
+  border: 0;
+}
+
+.overlayOpen {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Drawer FULLSCREEN (tela toda) */
+.drawer {
+  position: fixed;
+  inset: 0;
+  height: 100dvh;
+  width: 100vw;
+  background: rgba(10, 10, 10, 0.97);
+  transform: translateX(105%);
+  transition: 260ms cubic-bezier(.2,.9,.2,1);
+  z-index: 90;
+  padding: 16px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.drawerOpen {
+  transform: translateX(0);
+}
+
+.drawerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 4px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+/* Brand do drawer */
+.drawerBrand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+/* Logo do drawer em 150px (SEM pixelar) */
+.drawerLogo {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 25px rgba(0,0,0,0.35));
+}
+
+.closeBtn {
+  width: 46px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.92);
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.drawerLinks {
+  padding: 16px 4px 10px;
+  display: grid;
+  gap: 10px;
+}
+
+.drawerLink {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  padding: 14px 14px;
+  border-radius: 16px;
+  transition: 160ms ease;
+}
+
+.drawerLink:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 0, 0, 0.25);
+  transform: translateY(-1px);
+}
+
+.drawerCTA {
+  display: block;
+  text-align: center;
+  margin: 6px 4px 16px;
+  text-decoration: none;
+  background: #e11d2a;
+  color: #fff;
+  padding: 14px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-weight: 800;
+}
+
+/* =========================
+   MOBILE
+   - aqui é onde resolve o CORTE:
+     o header/nav precisa ter altura >= logo(150)
+   ========================= */
+@media (max-width: 860px) {
+    .nav {
+    min-height: 150px;          /* garante espaço da logo */
+    padding: 8px 14px;         /* 👈 espaçamento topo e base */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  /* esconde links desktop */
+  .side,
+  .sideRight .link,
+  .cta {
+    display: none;
+  }
+
+  /* logo na esquerda */
+  .logoWrap {
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+  }
+
+  /* LOGO MOBILE = 150px (sem cortar) */
+  .logo {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+  }
+
+  /* hamb na direita */
+  .burger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+  .drawer,
+  .overlay,
+  .bLine,
+  .link,
+  .cta,
+  .drawerLink {
+    transition: none !important;
+  }
+}

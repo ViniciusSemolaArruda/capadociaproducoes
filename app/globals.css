@@ -19,8 +19,15 @@
   }
 }
 
+/* Corrige navegação por âncoras com header sticky */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 30px; /* valor único para todas as seções */
+}
+
 body {
-  background: var(--background);
+  margin: 0;
+  background: #070707;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
