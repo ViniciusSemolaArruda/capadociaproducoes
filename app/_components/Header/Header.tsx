@@ -39,24 +39,14 @@ export default function Header() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [close]);
 
-  // trava scroll quando abre (HTML + BODY) — evita bug mobile
+  // ✅ se o usuário rolar a página, fecha o menu (evita sumir header / ficar preso aberto)
   useEffect(() => {
-    const prevHtml = document.documentElement.style.overflow;
-    const prevBody = document.body.style.overflow;
+    if (!open) return;
 
-    if (open) {
-      document.documentElement.style.overflow = "hidden";
-      document.body.style.overflow = "hidden";
-    } else {
-      document.documentElement.style.overflow = prevHtml;
-      document.body.style.overflow = prevBody;
-    }
-
-    return () => {
-      document.documentElement.style.overflow = prevHtml;
-      document.body.style.overflow = prevBody;
-    };
-  }, [open]);
+    const onScroll = () => close();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [open, close]);
 
   return (
     <header className={styles.header} id="site-header">
@@ -83,7 +73,7 @@ export default function Header() {
           />
         </Link>
 
-        {/* Lado direito (desktop) */}
+        {/* Lado direito (desktop) + hamb (mobile) */}
         <div className={styles.sideRight}>
           {rightLinks.map((l) => (
             <Link key={l.href} href={l.href} className={styles.link}>
@@ -100,7 +90,7 @@ export default function Header() {
             className={styles.burger}
             aria-label={open ? "Fechar menu" : "Abrir menu"}
             aria-expanded={open}
-            aria-controls="mobile-drawer"
+            aria-controls="mobile-menu"
             onClick={() => setOpen((v) => !v)}
             type="button"
           >
@@ -111,7 +101,7 @@ export default function Header() {
         </div>
       </nav>
 
-      {/* Overlay */}
+      {/* Overlay (clicou fora fecha) */}
       <button
         className={`${styles.overlay} ${open ? styles.overlayOpen : ""}`}
         onClick={close}
@@ -120,42 +110,24 @@ export default function Header() {
         type="button"
       />
 
-      {/* Drawer fullscreen */}
-      <aside
-        id="mobile-drawer"
-        className={`${styles.drawer} ${open ? styles.drawerOpen : ""}`}
+      {/* Menu abaixo do header */}
+      <div
+        id="mobile-menu"
+        className={`${styles.mobileMenu} ${open ? styles.mobileMenuOpen : ""}`}
         aria-hidden={!open}
       >
-        <div className={styles.drawerTop}>
-          <Link href="#inicio" className={styles.drawerBrand} onClick={close} aria-label="Início">
-            <Image
-              src="/novaLOGO.png"
-              alt="Capadócia Produções e Eventos"
-              width={300}
-              height={300}
-              sizes="150px"
-              className={styles.drawerLogo}
-              priority
-            />
-          </Link>
-
-          <button className={styles.closeBtn} onClick={close} type="button" aria-label="Fechar">
-            ✕
-          </button>
-        </div>
-
-        <div className={styles.drawerLinks}>
+        <div className={styles.mobileMenuInner}>
           {allLinks.map((l) => (
-            <Link key={l.href} href={l.href} className={styles.drawerLink} onClick={close}>
+            <Link key={l.href} href={l.href} className={styles.mobileLink} onClick={close}>
               {l.label}
             </Link>
           ))}
-        </div>
 
-        <Link href="#contato" className={styles.drawerCTA} onClick={close}>
-          Fale Conosco
-        </Link>
-      </aside>
+          <Link href="#contato" className={styles.mobileCTA} onClick={close}>
+            Fale Conosco
+          </Link>
+        </div>
+      </div>
     </header>
   );
 }

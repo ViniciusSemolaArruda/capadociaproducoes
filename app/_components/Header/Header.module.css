@@ -1,19 +1,12 @@
-/* =========================
-   HEADER (SEM QUEBRAR FIXED)
-   ========================= */
 .header {
   position: sticky;
   top: 0;
-  z-index: 80;
-
+  z-index: 100; /* ✅ header sempre acima */
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden;
-
   background: transparent;
 }
 
-/* Blur isolado (não quebra drawer/overlay no mobile) */
 .header::before {
   content: "";
   position: absolute;
@@ -24,12 +17,9 @@
   pointer-events: none;
 }
 
-/* =========================
-   DESKTOP
-   ========================= */
 .nav {
   position: relative;
-  z-index: 1;
+  z-index: 101;
 
   max-width: 1180px;
   margin: 0 auto;
@@ -59,51 +49,50 @@
   color: rgba(255, 255, 255, 0.86);
   text-decoration: none;
   font-size: 14px;
-  letter-spacing: 0.2px;
   padding: 8px 2px;
   border-bottom: 2px solid transparent;
-  transition: 150ms ease;
+  transition: color 160ms ease, border-color 160ms ease;
 }
 
 .link:hover {
-  color: #fff;
-  border-bottom-color: rgba(255, 0, 0, 0.85);
+  color: #ffffff;
+  border-bottom-color: #FE0000; /* 🔴 sublinhado vermelho */
 }
+
 
 .logoWrap {
   display: flex;
   justify-content: center;
+  align-items: center;
+  padding: 5px 0;
   text-decoration: none;
 }
 
-/* LOGO DESKTOP */
 .logo {
   width: 170px;
   height: 170px;
   object-fit: contain;
-  filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.35));
 }
 
 .cta {
   margin-left: 6px;
   background: #e11d2a;
-  color: #fff;
+  color: #ffffff;
   text-decoration: none;
   font-size: 13px;
   padding: 10px 12px;
   border-radius: 10px;
-  transition: 150ms ease;
   border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: background-color 160ms ease, color 160ms ease;
 }
 
 .cta:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.05);
+  background: #0025E5; /* 🔵 azul */
+  color: #ffffff;
 }
 
-/* =========================
-   BURGER (mobile)
-   ========================= */
+
+/* burger */
 .burger {
   display: none;
   margin-left: 8px;
@@ -132,33 +121,21 @@
 .bLine:nth-child(2) { top: 21px; }
 .bLine:nth-child(3) { top: 28px; }
 
-.bLine1 {
-  transform: translateX(-50%) translateY(7px) rotate(45deg);
-}
-.bLine2 {
-  opacity: 0;
-}
-.bLine3 {
-  transform: translateX(-50%) translateY(-7px) rotate(-45deg);
-}
+.bLine1 { transform: translateX(-50%) translateY(7px) rotate(45deg); }
+.bLine2 { opacity: 0; }
+.bLine3 { transform: translateX(-50%) translateY(-7px) rotate(-45deg); }
 
-/* =========================
-   OVERLAY (TELA TODA)
-   ========================= */
+/* overlay */
 .overlay {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100dvh;
-
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(2px);
-
+  background: rgba(0, 0, 0, 0.35);
   opacity: 0;
   pointer-events: none;
   transition: opacity 200ms ease;
-
-  z-index: 88;
+  z-index: 90; /* ✅ abaixo do header/menu */
   border: 0;
 }
 
@@ -167,119 +144,82 @@
   pointer-events: auto;
 }
 
-/* =========================
-   DRAWER (FULLSCREEN REAL)
-   ========================= */
-.drawer {
+/* menu abaixo do header (fixo) */
+.mobileMenu {
   position: fixed;
-  top: 0;
-  right: 0;
   left: 0;
-  bottom: 0;
+  right: 0;
+  top: var(--header-mobile-h, 178px);
 
-  width: 100%;
-  height: 100dvh;
-
-  box-sizing: border-box;
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  background: rgba(10, 10, 10, 0.97);
-
-  transform: translateX(100%);
-  transition: transform 260ms cubic-bezier(.2,.9,.2,1);
-
-  z-index: 90;
-  padding: 16px;
-
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
+  z-index: 95; /* ✅ abaixo do header, acima do overlay */
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: 200ms ease;
 }
 
-.drawerOpen {
-  transform: translateX(0);
+.mobileMenuOpen {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
-.drawerTop {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 10px 4px 14px;
+.mobileMenuInner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 14px 14px 16px;
+
+  background: rgba(8, 8, 8, 0.92);
+  backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.10);
-}
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
 
-.drawerBrand {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-}
-
-.drawerLogo {
-  width: 150px;
-  height: 150px;
-  object-fit: contain;
-  filter: drop-shadow(0 10px 25px rgba(0,0,0,0.35));
-}
-
-.closeBtn {
-  width: 46px;
-  height: 44px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.92);
-  cursor: pointer;
-  font-size: 18px;
-}
-
-.drawerLinks {
-  padding: 16px 4px 10px;
   display: grid;
   gap: 10px;
 }
 
-.drawerLink {
+.mobileLink {
   text-decoration: none;
   color: rgba(255, 255, 255, 0.92);
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.10);
   padding: 14px;
   border-radius: 16px;
-  transition: 160ms ease;
+  transition: border-color 160ms ease;
 }
 
-.drawerLink:hover {
-  background: rgba(255, 255, 255, 0.09);
-  border-color: rgba(255, 0, 0, 0.25);
-  transform: translateY(-1px);
+.mobileLink:hover {
+  border-color: #FE0000; /* 🔴 detalhe vermelho elegante */
 }
 
-.drawerCTA {
+.mobileCTA {
   display: block;
   text-align: center;
-  margin: 6px 4px 16px;
   text-decoration: none;
   background: #e11d2a;
-  color: #fff;
+  color: #ffffff;
   padding: 14px;
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   font-weight: 800;
+  transition: background-color 160ms ease, color 160ms ease;
 }
 
-/* =========================
-   MOBILE
-   ========================= */
+.mobileCTA:hover {
+  background: #0025E5; /* 🔵 azul */
+  color: #ffffff;
+}
+
+
+/* MOBILE */
 @media (max-width: 860px) {
   .nav {
-    min-height: 150px;
-    padding: 8px 14px;
-
+    min-height: 178px;
+    padding: 14px 14px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 12px;
+    position: relative;
   }
 
   .side,
@@ -288,10 +228,20 @@
     display: none;
   }
 
-  .logoWrap {
-    justify-content: flex-start;
+  .sideRight {
+    margin-left: auto;
+    display: flex;
     align-items: center;
-    height: 100%;
+  }
+
+  .logoWrap {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .logo {
@@ -304,18 +254,8 @@
     align-items: center;
     justify-content: center;
   }
-}
 
-/* =========================
-   ACESSIBILIDADE
-   ========================= */
-@media (prefers-reduced-motion: reduce) {
-  .drawer,
-  .overlay,
-  .bLine,
-  .link,
-  .cta,
-  .drawerLink {
-    transition: none !important;
+  :root {
+    --header-mobile-h: 178px;
   }
 }
