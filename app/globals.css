@@ -1,10 +1,14 @@
 @import "tailwindcss";
 
+/* =========================
+   VARIÁVEIS GLOBAIS
+   ========================= */
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
+/* Integração com fontes do Next */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -12,6 +16,7 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Dark mode */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -19,12 +24,26 @@
   }
 }
 
-/* Corrige navegação por âncoras com header sticky */
+/* =========================
+   CORREÇÃO DE ÂNCORAS (#)
+   Header sticky grande
+   ========================= */
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 30px; /* valor único para todas as seções */
+  scroll-padding-top: var(--header-h, 0px);
 }
 
+
+/* Mobile */
+@media (max-width: 860px) {
+  html {
+    scroll-padding-top: 170px;
+  }
+}
+
+/* =========================
+   BODY
+   ========================= */
 body {
   margin: 0;
   background: #070707;

@@ -50,7 +50,7 @@ export default function Header() {
   }, [open]);
 
   return (
-    <header className={styles.header}>
+    <header className={styles.header} id="site-header">
       <nav className={styles.nav} aria-label="Navegação principal">
         {/* Lado esquerdo (desktop) */}
         <div className={styles.side}>

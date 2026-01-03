@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import HeaderOffset from "./_components/HeaderOffset/HeaderOffset";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
   description:
     "Produtora cultural e de eventos com quase 30 anos de atuação. Projetos com propósito, ética, excelência e soluções digitais.",
   applicationName: "Capadócia Produções e Eventos",
-  metadataBase: new URL("https://www.capadociaproducoes.com.br"), // troque pela sua URL quando tiver
+  metadataBase: new URL("https://capadociaproducoes.vercel.app/"),
   icons: {
     icon: [
       { url: "/favicon.ico" },
@@ -33,13 +34,13 @@ export const metadata: Metadata = {
     title: "Capadócia Produções e Eventos",
     description:
       "Produção de eventos culturais, esportivos e corporativos com soluções digitais e excelência na execução.",
-    url: "https://www.capadociaproducoes.com.br", // troque pela sua URL
+    url: "https://capadociaproducoes.vercel.app/",
     siteName: "Capadócia Produções e Eventos",
     locale: "pt_BR",
     type: "website",
     images: [
       {
-        url: "/og-image.png", // coloque esse arquivo no /public se quiser preview bonito
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "Capadócia Produções e Eventos",
@@ -63,6 +64,8 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* Ajusta automaticamente o scroll-padding-top com base na altura do header */}
+        <HeaderOffset />
         {children}
       </body>
     </html>
