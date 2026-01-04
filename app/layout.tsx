@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import HeaderOffset from "./_components/HeaderOffset/HeaderOffset";
+import WhatsappFloat from "./_components/WhatsappFloat/WhatsappFloat";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -66,6 +67,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {/* Ajusta automaticamente o scroll-padding-top com base na altura do header */}
         <HeaderOffset />
+        <WhatsappFloat />
         {children}
       </body>
     </html>

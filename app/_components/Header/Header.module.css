@@ -1,10 +1,20 @@
 .header {
   position: sticky;
   top: 0;
-  z-index: 100; /* ✅ header sempre acima */
+  z-index: 100;
   width: 100%;
   max-width: 100%;
   background: transparent;
+
+  /* ✅ animação suave */
+  transition: transform 220ms ease, opacity 220ms ease;
+  will-change: transform;
+}
+
+.headerHidden {
+  transform: translateY(-110%);
+  opacity: 0.98;
+  pointer-events: none;
 }
 
 .header::before {

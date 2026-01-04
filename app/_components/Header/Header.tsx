@@ -2,11 +2,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./Header.module.css";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
+
+  const lastY = useRef(0);
+  const ticking = useRef(false);
 
   const leftLinks = useMemo(
     () => [
@@ -30,7 +34,7 @@ export default function Header() {
 
   const close = useCallback(() => setOpen(false), []);
 
-  // ESC fecha
+  // ESC fecha menu
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") close();
@@ -39,44 +43,76 @@ export default function Header() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [close]);
 
-  // se rolar a página, fecha o menu
+  // ✅ esconde ao descer / mostra ao subir (não esconde se menu aberto)
   useEffect(() => {
-    if (!open) return;
-    const onScroll = () => close();
+    lastY.current = window.scrollY;
+
+    const onScroll = () => {
+      if (ticking.current) return;
+      ticking.current = true;
+
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        const delta = y - lastY.current;
+
+        // zona morta pra evitar tremedeira
+        if (Math.abs(delta) >= 10) {
+          if (!open) {
+            // só esconde depois de um pouco de scroll (pra não sumir no topo)
+            if (delta > 0 && y > 140) setHidden(true);
+            if (delta < 0) setHidden(false);
+          } else {
+            setHidden(false);
+          }
+          lastY.current = y;
+        }
+
+        ticking.current = false;
+      });
+    };
+
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [open, close]);
+  }, [open]);
 
-  // ✅ scroll com offset REAL do header (funciona igual em produção)
+  // ✅ scroll com offset real do header (melhor quando header some/volta)
   const scrollToHash = useCallback((hash: string) => {
     const id = hash.replace("#", "");
     const el = document.getElementById(id);
     if (!el) return;
 
+    // se o header estiver escondido, considera 0
     const header = document.getElementById("site-header");
-    const headerH = header?.getBoundingClientRect().height ?? 0;
+    const headerH = hidden ? 0 : header?.getBoundingClientRect().height ?? 0;
 
-    // pequeno "gap" pra respirar
-    const gap = 10;
-
+    const gap = -230;
     const y = window.scrollY + el.getBoundingClientRect().top - headerH - gap;
 
     window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
-  }, []);
+  }, [hidden]);
 
   const onNavClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
       if (!href.startsWith("#")) return;
       e.preventDefault();
-      close();
-      // espera 1 frame pra garantir que o header/menu já fechou e layout estabilizou
-      requestAnimationFrame(() => scrollToHash(href));
+
+      // fecha menu e garante header visível antes de calcular
+      setOpen(false);
+      setHidden(false);
+
+      // espera fechar + layout estabilizar
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => scrollToHash(href));
+      });
     },
-    [close, scrollToHash]
+    [scrollToHash]
   );
 
   return (
-    <header className={styles.header} id="site-header">
+    <header
+      id="site-header"
+      className={`${styles.header} ${hidden ? styles.headerHidden : ""}`}
+    >
       <nav className={styles.nav} aria-label="Navegação principal">
         <div className={styles.side}>
           {leftLinks.map((l) => (
@@ -91,16 +127,18 @@ export default function Header() {
           ))}
         </div>
 
-        <Link href="#inicio" className={styles.logoWrap} aria-label="Capadócia Produções"
+        <Link
+          href="#inicio"
+          className={styles.logoWrap}
+          aria-label="Instituto Eu Acredito"
           onClick={(e) => onNavClick(e, "#inicio")}
         >
           <Image
             src="/novaLOGO.png"
-            alt="Capadócia Produções e Eventos"
-            width={300}
-            height={300}
+            alt="Instituto Eu Acredito"
+            width={400}
+            height={400}
             priority
-            sizes="(max-width: 860px) 150px, 170px"
             className={styles.logo}
           />
         </Link>
@@ -117,10 +155,15 @@ export default function Header() {
             </Link>
           ))}
 
-          <Link href="#contato" className={styles.cta} onClick={(e) => onNavClick(e, "#contato")}>
+          <Link
+            href="#contato"
+            className={styles.cta}
+            onClick={(e) => onNavClick(e, "#contato")}
+          >
             Fale Conosco
           </Link>
 
+          {/* ✅ Hambúrguer continua aqui */}
           <button
             className={styles.burger}
             aria-label={open ? "Fechar menu" : "Abrir menu"}
@@ -161,7 +204,11 @@ export default function Header() {
             </Link>
           ))}
 
-          <Link href="#contato" className={styles.mobileCTA} onClick={(e) => onNavClick(e, "#contato")}>
+          <Link
+            href="#contato"
+            className={styles.mobileCTA}
+            onClick={(e) => onNavClick(e, "#contato")}
+          >
             Fale Conosco
           </Link>
         </div>
